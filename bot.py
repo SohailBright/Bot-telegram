@@ -1,3 +1,4 @@
+import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application,
@@ -7,7 +8,7 @@ from telegram.ext import (
     ContextTypes,
     filters,
 )
-import os
+
 BOT_TOKEN = os.environ.get("8719143926:AAHMj3vpTxCgV45dZj93qBC3WMqICOgyAOA")
 import logging
 from datetime import datetime, timedelta
