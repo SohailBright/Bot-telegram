@@ -7,7 +7,8 @@ from telegram.ext import (
     ContextTypes,
     filters,
 )
-from config import BOT_TOKEN
+import os
+BOT_TOKEN = os.environ.get("8719143926:AAHMj3vpTxCgV45dZj93qBC3WMqICOgyAOA")
 import logging
 from datetime import datetime, timedelta
 
