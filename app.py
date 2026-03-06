@@ -1,24 +1,24 @@
 from flask import Flask
-import subprocess
-import os
 import threading
+import os
+import sys
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bot is running! ✅"
+    return "Bot is running!"
 
 def run_bot():
-    """Bot ko background mein chalu karo"""
-    subprocess.Popen(["python", "bot.py"])
+    import subprocess
+    subprocess.run([sys.executable, "bot.py"])
 
 if __name__ == '__main__':
-    # Bot ko background mein chalu karo
-    bot_thread = threading.Thread(target=run_bot)
-    bot_thread.daemon = True
+    # Start bot in background
+    bot_thread = threading.Thread(target=run_bot, daemon=True)
     bot_thread.start()
     
-    # Flask server chalu karo
-    port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port)
+    # Start Flask server
+    port = int(os.environ.get("PORT", 10000))
+    print(f"Starting server on port {port}")
+    app.run(host='0.0.0.0', port=port, debug=False)
