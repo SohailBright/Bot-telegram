@@ -416,7 +416,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(requester_id, "❌ *Partner rejected ID share request.*", parse_mode='Markdown')
         await query.edit_message_text("❌ *Request rejected.*", parse_mode='Markdown')
 
-def main():
+import asyncio
+
+async def main():
     """Start the bot"""
     app = Application.builder().token(BOT_TOKEN).build()
     
@@ -432,7 +434,21 @@ def main():
     
     # Start bot
     logger.info("Bot started...")
-    app.run_polling()
+    
+    await app.initialize()
+    await app.start()
+    await app.updater.start_polling()
+    
+    # Keep running
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        await app.updater.stop()
+        await app.stop()
+        await app.shutdown()
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
