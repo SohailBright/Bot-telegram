@@ -445,7 +445,44 @@ async def profile_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=get_idle_buttons(),
         parse_mode='Markdown'
     )
+async def report_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Report current partner"""
+    user_id = update.effective_user.id
+    user = get_user(user_id)
+    
+    if user['state'] == STATE_CHATTING:
+        partner_id = end_chat(user_id)
+        user['last_partner'] = partner_id
+        
+        if partner_id:
+            try:
+                await context.bot.send_message(
+                    partner_id,
+                    "❌ *Partner left the chat!*\n\nWhat would you like to do?",
+                    reply_markup=get_after_chat_buttons(),
+                    parse_mode='Markdown'
+                )
+            except:
+                pass
+        
+        await update.message.reply_text(
+            "🚨 *Report User*\n\nSelect a reason:",
+            reply_markup=get_report_buttons(),
+            parse_mode='Markdown'
+        )
+    elif user.get('last_partner'):
+        await update.message.reply_text(
+            "🚨 *Report User*\n\nSelect a reason:",
+            reply_markup=get_report_buttons(),
+            parse_mode='Markdown'
+        )
+    else:
+        await update.message.reply_text("❌ No one to report!")
 
+
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle all text messages"""
+    
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle all text messages"""
     user_id = update.effective_user.id
